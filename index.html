@@ -3,65 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simona Havelková</title>
+    <title>Clock</title>
+
     <link rel="stylesheet" href="styles.css">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap" rel="stylesheet">
-
 </head>
 <body>
 
-
-    <button class="kuk">kuk</button>
-
-    <nav>
-        <ul>
-            <li><a href="#intro">intro</a></li>
-            <li><a href="#about">about me</a></li>
-            <li><a href="#kontakt">kontakty</a></li>
-            <li><a href="#projekty">projekty</a></li>
-        </ul>
-    </nav>
-    
-    <section id="intro" class="bbh-sans-bartle-regular">
-        <div class="nadpis">
-            <h1>
-                <p>Hey,</p>
-                <p>I'm Simona</p>
-            </h1>
-        </div>
-
-        <div class="foto">
-            <img src="pictures/zena.png">
-        </div>
-
-        <div class="kdoJsem">
-            <p>Profesinal kok</p>
-        </div>
-    </section>
+    <svg id="ikona-nastaveni" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+        <path d="M3 4h18v2H3zm0 4h12v2H3zm0 4h18v2H3zm0 4h12v2H3zm0 4h18v2H3z"/>
+    </svg>
 
 
-    <section id="about">
-        <p class="txt">
-            I am a student at the Secondary Technical School in Třebíč, specializing in Information Technology. 
-            I strongly dislike Milada, also known as Skibidi.
-        </p>
-    </section>
-    
-    <section id="kontakt">
-        <h1>KONTAKTY:</h1>
-    </section>
+    <h1><span id="hodiny"></span></h1>
+    <p id="datum"></p>
 
-    <section id="projekty">
-        <h1>projekty</h1>
-    </section>
+    <div class="overlay"></div>
 
 
 </body>
 
-<script src="scripts.js"></script>
+<script src="script.js">
+</script>
 
 </html>
