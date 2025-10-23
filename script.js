@@ -1,73 +1,99 @@
-function hodiny(){
-    const datum = new Date();
+function hodiny() {
+    const offset = parseInt(localStorage.getItem("timeOffset")) || 0;
+    const datum = new Date(Date.now() + offset * 60000);
     const h = datum.getHours().toString().padStart(2, '0');
     const m = datum.getMinutes().toString().padStart(2, '0');
     const s = datum.getSeconds().toString().padStart(2, '0');
 
-    document.getElementById("hodiny").innerHTML =  h  + ":" + m + ":" + s ;
+    document.getElementById("hodiny").textContent = `${h}:${m}:${s}`;
 }
 
 hodiny();
 setInterval(hodiny, 1000);
 
+function zobrazDatum() {
+    const offset = parseInt(localStorage.getItem("timeOffset")) || 0;
+    const datum = new Date(Date.now() + offset * 60000);
 
-function datum(){
-    const datum = new Date();
-    const d = datum.getDay();
+    const dny = ["neděle", "pondělí", "úterý", "středa", "čtvrtek", "pátek", "sobota"];
+    const mesice = ["ledna", "února", "března", "dubna", "května", "června", "července", "srpna", "září", "října", "listopadu", "prosince"];
 
-    var denCisla = datum.getDate();
-    var mesic = datum.getMonth() + 1;
-    var rok = datum.getFullYear();
-
-    var textDne = "";
-    var textMesice = "";
-
-    switch(d){
-        case 1: textDne = "Pondělí"; break;
-        case 2: textDne = "Úterý"; break;
-        case 3: textDne = "Středa"; break;
-        case 4: textDne = "Čtvrtek"; break;
-        case 5: textDne = "Pátek"; break;
-        case 6: textDne = "Sobota"; break;
-        case 7: textDne = "Neděle"; break;
-    }
-
-    switch (mesic){
-        case 1: textMesice = "ledna"; break;
-        case 2: textMesice = "února"; break;
-        case 3: textMesice = "března"; break;
-        case 4: textMesice = "dubna"; break;
-        case 5: textMesice = "května"; break;
-        case 6: textMesice = "června"; break;
-        case 7: textMesice = "července"; break;
-        case 8: textMesice = "srpna"; break;
-        case 9: textMesice = "zaří"; break;
-        case 10: textMesice = "října"; break;
-        case 11: textMesice = "listopadu"; break;
-        case 12: textMesice = "prosince"; break;
-
-    }
-
-
-    document.getElementById("datum").innerHTML = textDne + " " + denCisla + ". " + textMesice + " " + rok;
+    const text = `${dny[datum.getDay()]} ${datum.getDate()}. ${mesice[datum.getMonth()]} ${datum.getFullYear()}`;
+    document.getElementById("datum").textContent = text;
 }
 
-datum();
-
+zobrazDatum();
+setInterval(zobrazDatum, 60000);
 
 window.addEventListener("load", () => {
-      const overlay = document.querySelector(".overlay");
-      overlay.style.opacity = "0";
+    const overlay = document.querySelector(".overlay");
+    if (overlay) {
+        overlay.style.opacity = "0";
+        setTimeout(() => overlay.remove(), 2000);
+    }
 
-      // Odstranění překryvu po dokončení přechodu
-      setTimeout(() => {
-        overlay.remove();
-      }, 2000);
+    const ulozenyOffset = localStorage.getItem("timeOffset");
+    if (ulozenyOffset !== null && offsetInput) {
+        offsetInput.value = ulozenyOffset;
+    }
+});
+
+const ikonaNastaveni = document.getElementById("ikona-nastaveni");
+const panel = document.getElementById("settingsPanel");
+const ulozitBtn = document.getElementById("saveSettings");
+const offsetInput = document.getElementById("offset");
+
+ikonaNastaveni.addEventListener("click", () => {
+    panel.classList.toggle("open");
 });
 
 
-document.getElementById("ikona-nastaveni").addEventListener("click", () => {
-    
-    
+// Uložit po kliknutí na tlačítko
+ulozitBtn.addEventListener("click", () => {
+    ulozPosun();
+});
 
+// Uložit po stisknutí Enter v inputu
+offsetInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        ulozPosun();
+    }
+});
+
+// Funkce pro uložení posunu a další akce
+function ulozPosun() {
+    const value = offsetInput.value.trim();
+    if (value === "") return;
+
+    localStorage.setItem("timeOffset", value);
+    zobrazAlert(`Nastavení uloženo: ${value} min`);
+
+    hodiny();
+    zobrazDatum();
+
+    panel.classList.remove("open");
+}
+
+
+function zobrazAlert(text) {
+    const alert = document.createElement("div");
+    alert.className = "custom-alert";
+    alert.textContent = text;
+    document.body.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.animation = "fadeOut 0.6s forwards";
+        setTimeout(() => alert.remove(), 600);
+    }, 2500);
+}
+
+document.addEventListener("click", (e) => {
+    if (!panel.classList.contains("open")) return;
+
+    const klikUVnitrPanelu = panel.contains(e.target);
+    const klikNaIkonu = ikonaNastaveni.contains(e.target);
+
+    if (!klikUVnitrPanelu && !klikNaIkonu) {
+        panel.classList.remove("open");
+    }
 });
